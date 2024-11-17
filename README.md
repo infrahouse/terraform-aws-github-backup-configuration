@@ -70,7 +70,7 @@ resource "aws_kms_key" "mykey" {
 
 module "github-backups" {
     source                = "infrahouse/github-backup-configuration/aws"
-    version               = "1.0.0"
+    version               = "~> 1.0"
     ...
     kms_master_key_id     = aws_kms_key.mykey.id
 ...
