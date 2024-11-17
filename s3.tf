@@ -29,16 +29,16 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "default" {
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "infrahouse-backup" {
-    bucket = aws_s3_bucket_versioning.enabled.bucket
-    rule {
-        id     = "delete-old"
-        status = "Enabled"
-        filter {}
-        expiration {
-            days = var.backup_retention_days
-        }
-        noncurrent_version_expiration {
-            noncurrent_days = 7
-        }
+  bucket = aws_s3_bucket_versioning.enabled.bucket
+  rule {
+    id     = "delete-old"
+    status = "Enabled"
+    filter {}
+    expiration {
+      days = var.backup_retention_days
     }
+    noncurrent_version_expiration {
+      noncurrent_days = 7
+    }
+  }
 }
