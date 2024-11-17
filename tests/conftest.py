@@ -16,7 +16,6 @@ TEST_ACCOUNT = "303467602807"
 TEST_ROLE_ARN = "arn:aws:iam::303467602807:role/ecs-tester"
 DEFAULT_PROGRESS_INTERVAL = 10
 TRACE_TERRAFORM = False
-DESTROY_AFTER = True
 UBUNTU_CODENAME = "jammy"
 
 LOG = logging.getLogger(__name__)
@@ -25,6 +24,42 @@ TEST_ZONE = "ci-cd.infrahouse.com"
 TERRAFORM_ROOT_DIR = "test_data"
 
 setup_logging(LOG, debug=True)
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--keep-after",
+        action="store_true",
+        default=False,
+        help="If specified, don't destroy resources.",
+    )
+    parser.addoption(
+        "--test-role-arn",
+        action="store",
+        default=TEST_ROLE_ARN,
+        help=f"AWS IAM role ARN that will create resources. Default, {TEST_ROLE_ARN}",
+    )
+    parser.addoption(
+        "--github-token",
+        action="store",
+        required=True,
+        help=f"GitHub Token with Admin permissions.",
+    )
+
+
+@pytest.fixture(scope="session")
+def keep_after(request):
+    return request.config.getoption("--keep-after")
+
+
+@pytest.fixture(scope="session")
+def test_role_arn(request):
+    return request.config.getoption("--test-role-arn")
+
+
+@pytest.fixture(scope="session")
+def github_token(request):
+    return request.config.getoption("--github-token")
 
 
 @pytest.fixture(scope="session")
@@ -66,25 +101,3 @@ def route53_client(boto3_session):
 @pytest.fixture()
 def elbv2_client(boto3_session):
     return boto3_session.client("elbv2", region_name=REGION)
-
-
-@pytest.fixture(scope="session")
-def service_network(boto3_session):
-    terraform_module_dir = osp.join(TERRAFORM_ROOT_DIR, "service-network")
-    # Create service network
-    with open(osp.join(terraform_module_dir, "terraform.tfvars"), "w") as fp:
-        fp.write(
-            dedent(
-                f"""
-                role_arn = "{TEST_ROLE_ARN}"
-                region   = "{REGION}"
-                """
-            )
-        )
-    with terraform_apply(
-        terraform_module_dir,
-        destroy_after=DESTROY_AFTER,
-        json_output=True,
-        enable_trace=TRACE_TERRAFORM,
-    ) as tf_service_network_output:
-        yield tf_service_network_output

@@ -10,18 +10,6 @@ data "aws_iam_policy_document" "permissions" {
   }
 }
 
-data "aws_iam_policy_document" "trust" {
-  statement {
-    actions = [
-      "s3:PutObject",
-      "s3:GetObject",
-    ]
-    resources = [
-      "arn:aws:s3:::${aws_s3_bucket.infrahouse-backup.id}/*"
-    ]
-  }
-}
-
 data "aws_iam_policy_document" "infrahouse-backup-trust" {
   statement {
     actions = ["sts:AssumeRole"]
