@@ -48,7 +48,7 @@ Use the github-backup-configuration module to provision necessary resources.
 ```hcl
 module "github-backups" {
   source                = "infrahouse/github-backup-configuration/aws"
-  version               = "1.0.0"
+  version               = "~> 1.0"
   bucket_prefix         = "mycompany-github-backups-"
   backup_retention_days = 90
   logs_retention_days   = 360
