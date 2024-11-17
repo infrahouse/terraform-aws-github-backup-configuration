@@ -16,29 +16,29 @@ The `INFRAHOUSE_BACKUP_ROLE` role has permissions to upload files to the `INFRAH
 An **InfraHouse GitHub Backup** worker assumes the `INFRAHOUSE_BACKUP_ROLE`, clones repositories
 to a temporary tmpfs volume. Then it uploads the archives to `INFRAHOUSE_BACKUP_BUCKET` and unmounts the tmpfs volume.
 
-![terraform-aws-github-backup-configuration.drawio.png](assets/terraform-aws-github-backup-configuration.drawio.png)
+![terraform-aws-github-backup-configuration.drawio.png](https://github.com/infrahouse/terraform-aws-github-backup-configuration/raw/main/assets/terraform-aws-github-backup-configuration.drawio.png)
 
 ## Installation
 
 Open https://github.com/apps/infrahouse-github-backup in a browser. Click, "Configure"
 
-![Screenshot - 2024-11-17 08-57-07.png](assets%2FScreenshot%20-%202024-11-17%2008-57-07.png)
+![Screenshot - 2024-11-17 08-57-07.png](https://github.com/infrahouse/terraform-aws-github-backup-configuration/raw/main/assets/Screenshot%20-%202024-11-17%2008-57-07.png)
 
 If GitHub suggests, select a user. The selected user must have admin permissions in an organization you want to backup.
-![Screenshot - 2024-11-17 08-59-58.png](assets%2FScreenshot%20-%202024-11-17%2008-59-58.png)
+![Screenshot - 2024-11-17 08-59-58.png](https://github.com/infrahouse/terraform-aws-github-backup-configuration/raw/main/assets/Screenshot%20-%202024-11-17%2008-59-58.png)
 
 Select an organization. Note, **InfraHouse GitHub Backup** supports organizations only.
 
-![Screenshot - 2024-11-17 09-03-10.png](assets%2FScreenshot%20-%202024-11-17%2009-03-10.png)
+![Screenshot - 2024-11-17 09-03-10.png](https://github.com/infrahouse/terraform-aws-github-backup-configuration/raw/main/assets/Screenshot%20-%202024-11-17%2009-03-10.png)
 
 Select repositories you want to back up or just pick "All repositories" option. Click "Install".
 
-![Screenshot - 2024-11-17 09-04-55.png](assets%2FScreenshot%20-%202024-11-17%2009-04-55.png)
+![Screenshot - 2024-11-17 09-04-55.png](https://github.com/infrahouse/terraform-aws-github-backup-configuration/raw/main/assets/Screenshot%20-%202024-11-17%2009-04-55.png)
 
 Success! Now,
 **InfraHouse GitHub Backup** can request a read-only temporary tokens in your GitHub organization.
 
-![Screenshot - 2024-11-17 09-06-11.png](assets%2FScreenshot%20-%202024-11-17%2009-06-11.png)
+![Screenshot - 2024-11-17 09-06-11.png](https://github.com/infrahouse/terraform-aws-github-backup-configuration/raw/main/assets/Screenshot%20-%202024-11-17%2009-06-11.png)
 
 Next step is to set up a backup destination S3 bucket, IAM role and permissions.
 

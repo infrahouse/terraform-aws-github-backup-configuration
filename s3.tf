@@ -42,3 +42,9 @@ resource "aws_s3_bucket_lifecycle_configuration" "infrahouse-backup" {
     }
   }
 }
+
+resource "aws_s3_bucket_logging" "infrahouse-backup" {
+  bucket        = aws_s3_bucket.infrahouse-backup.bucket
+  target_bucket = aws_s3_bucket.infrahouse-backup-logs.bucket
+  target_prefix = local.logging_prefix
+}
