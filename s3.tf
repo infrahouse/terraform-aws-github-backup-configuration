@@ -48,3 +48,35 @@ resource "aws_s3_bucket_logging" "infrahouse-backup" {
   target_bucket = aws_s3_bucket.infrahouse-backup-logs.bucket
   target_prefix = local.logging_prefix
 }
+
+data "aws_iam_policy_document" "enforce_tls" {
+  statement {
+    sid    = "AllowSSLRequestsOnly"
+    effect = "Deny"
+
+    actions = [
+      "s3:*",
+    ]
+
+    resources = [
+      aws_s3_bucket.infrahouse-backup.arn,
+      "${aws_s3_bucket.infrahouse-backup.arn}/*",
+    ]
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["false"]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "enforce_tls" {
+  bucket = aws_s3_bucket.infrahouse-backup.id
+  policy = data.aws_iam_policy_document.enforce_tls.json
+}

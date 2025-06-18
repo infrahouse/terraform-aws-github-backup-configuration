@@ -46,3 +46,35 @@ resource "aws_s3_bucket_lifecycle_configuration" "infrahouse-backup-logs" {
     }
   }
 }
+
+data "aws_iam_policy_document" "enforce_tls_logs" {
+  statement {
+    sid    = "AllowSSLRequestsOnly"
+    effect = "Deny"
+
+    actions = [
+      "s3:*",
+    ]
+
+    resources = [
+      aws_s3_bucket.infrahouse-backup-logs.arn,
+      "${aws_s3_bucket.infrahouse-backup-logs.arn}/*",
+    ]
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["false"]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "enforce_tls_logs" {
+  bucket = aws_s3_bucket.infrahouse-backup-logs.id
+  policy = data.aws_iam_policy_document.enforce_tls_logs.json
+}
